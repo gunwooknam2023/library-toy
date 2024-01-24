@@ -3,6 +3,8 @@ package com.librarytoy.repository;
 import com.librarytoy.entity.SavedBook;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SavedBookRepository extends JpaRepository<SavedBook, Long> {
+import java.util.Optional;
 
+public interface SavedBookRepository extends JpaRepository<SavedBook, Long> {
+    Optional<SavedBook> findByIsbn(String isbn);
 }

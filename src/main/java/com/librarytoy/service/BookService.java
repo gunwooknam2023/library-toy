@@ -6,7 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.librarytoy.dto.BookSaveRequestDto;
 import com.librarytoy.dto.SearchBookOfNaverResponseDto;
 import com.librarytoy.dto.SearchBookResponseDto;
+import com.librarytoy.entity.SavedBook;
 import com.librarytoy.repository.SavedBookRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.RequestEntity;
@@ -15,8 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.beans.Transient;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -71,9 +75,14 @@ public class BookService {
 
     // 도서 저장 api
     public String bookSave(BookSaveRequestDto bookSaveRequestDto) {
-        // 체크한 책의 구분 key를 받아옴 (requestdto)
-        return "asdf";
+        Optional<SavedBook> findBook = savedBookRepository.findByIsbn(bookSaveRequestDto.getIsbn());
 
-        // 책의 정보를 저장 (중복체크)
+        if(findBook.isEmpty()){
+            SavedBook savedBook = new SavedBook(bookSaveRequestDto);
+            savedBookRepository.save(savedBook);
+            return "도서가 저장되었습니다.";
+        } else{
+            return "이미 저장된 도서입니다.";
+        }
     }
 }

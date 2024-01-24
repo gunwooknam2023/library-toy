@@ -1,8 +1,12 @@
 package com.librarytoy.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class BookSaveRequestDto {
-    private long isbn;
+    public String isbn;
 }

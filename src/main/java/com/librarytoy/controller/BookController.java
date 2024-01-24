@@ -1,14 +1,12 @@
 package com.librarytoy.controller;
 
 import com.librarytoy.dto.BookSaveRequestDto;
-import com.librarytoy.dto.SearchBookOfNaverResponseDto;
 import com.librarytoy.dto.SearchBookResponseDto;
 import com.librarytoy.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
