@@ -22,8 +22,9 @@ public class BookController {
      * @return 검색한 책의 정보 반환
      */
     @GetMapping("/books")
-    ResponseEntity<List<SearchBookResponseDto>> bookSearch(@RequestParam("query") String query){
-        List<SearchBookResponseDto> searchBookResponseDtos = bookService.bookSearch(query);
+    ResponseEntity<List<SearchBookResponseDto>> bookSearch(@RequestParam("query") String query,
+                                                           @RequestParam(name = "page", defaultValue = "1") int page){
+        List<SearchBookResponseDto> searchBookResponseDtos = bookService.bookSearch(query, page);
         return ResponseEntity.ok(searchBookResponseDtos);
     }
 

@@ -34,14 +34,16 @@ public class BookService {
     private String NAVER_CLIENT_SECRET_ID;
 
     // 도서 검색 api (title)
-    public List<SearchBookResponseDto> bookSearch(String query){
+    public List<SearchBookResponseDto> bookSearch(String query, int page){
+        int start = (page - 1) * 10 + 1;
+
         // RequestParam 방식으로 책의 제목을 가져와서 조회(api)
         URI uri = UriComponentsBuilder
                 .fromUriString("https://openapi.naver.com")
                 .path("/v1/search/book.json")
                 .queryParam("query", query)
                 .queryParam("display", 10)
-                .queryParam("start", 1)
+                .queryParam("start", start)
                 .queryParam("sort", "sim")
                 .encode()
                 .build()
