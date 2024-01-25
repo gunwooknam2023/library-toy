@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <title>Saved Books</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    <style>
+        .book-item {
+            width: 1500px;
+            height: 150px;
+            margin: 10px;
+            display: flex;
+        }
+
+        .book-info {
+            width: 10%;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .book-info img {
+            max-height: 100%;
+        }
+
+        .book-details {
+            width: 50%;
+            padding: 10px;
+        }
+
+        .book-details a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .book-details h3 {
+            margin-bottom: 5px;
+        }
+
+        .book-details p {
+            margin: 0;
+        }
+
+        .book-actions {
+            width: 40%;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="savedBooks" style="background-color: red"></div>
+
+<script>
+    // 페이지 로드 시 저장된 도서 목록을 불러와서 화면에 출력
+    window.onload = function() {
+        loadSavedBooks();
+    };
+
+    function loadSavedBooks() {
+        // API 호출을 위한 Ajax 요청
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/books/save", true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // API 응답을 처리하는 코드
+                var response = JSON.parse(xhr.responseText);
+
+                // 저장된 도서 목록을 화면에 출력
+                showSavedBooks(response);
+            }
+        };
+        xhr.send();
+    }
+
+    // 저장된 도서 목록을 화면에 출력하는 함수
+    function showSavedBooks(savedBooks) {
+        var savedBooksContainer = document.getElementById("savedBooks");
+        savedBooksContainer.innerHTML = ""; // 이전 목록 초기화
+
+        savedBooks.forEach(function (book) {
+            // 각 도서 정보를 표시하는 div 생성
+            var bookItem = document.createElement("div");
+            bookItem.className = "book-item";
+
+            // ISBN 및 이미지 부분
+            var bookInfo = document.createElement("div");
+            bookInfo.className = "book-info";
+            bookInfo.innerHTML = "<p>" + book.isbn + "</p><img src='" + book.image + "' alt='Book Cover'>";
+
+            // 도서 제목 및 세부 정보 부분
+            var bookDetails = document.createElement("div");
+            bookDetails.className = "book-details";
+            var titleLink = "<h3><a href='" + book.link + "'>" + book.title + "</a></h3>";
+            var discountInfo = "<p>Discount: " + book.discount + "</p>";
+            var authorPublisherInfo = "<p>" + book.author + " / " + book.publisher + "</p>";
+            var pubdateInfo = "<p>Pubdate: " + book.pubdate + "</p>";
+            bookDetails.innerHTML = titleLink + discountInfo + authorPublisherInfo + pubdateInfo;
+
+            // 도서 목록에 도서 삭제 등의 동작을 추가할 경우 이 부분에 버튼 등을 추가
+
+            // 생성한 요소들을 부모 div에 추가
+            bookItem.appendChild(bookInfo);
+            bookItem.appendChild(bookDetails);
+
+            // 부모 div를 목록에 추가
+            savedBooksContainer.appendChild(bookItem);
+        });
+    }
+
+</script>
+
+</body>
+</html>
