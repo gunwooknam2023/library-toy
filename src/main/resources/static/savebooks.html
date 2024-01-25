@@ -8,11 +8,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
     <style>
+        /* 이전 스타일 유지 */
+
         .book-item {
-            width: 1500px;
-            height: 150px;
+            width: 100%;
+            border-bottom: 1px solid #ccc; /* 각 도서를 구분하는 선 추가 */
+            margin-bottom: 10px; /* 도서 간 간격 추가 */
+        }
+
+        /* 각 섹션별 마진 추가 */
+        .book-info, .book-details, .book-actions {
             margin: 10px;
-            display: flex;
         }
 
         .book-info {
@@ -22,7 +28,8 @@
         }
 
         .book-info img {
-            max-height: 100%;
+            width: 150px; /* 가로 크기 100px로 조정 */
+            height: 180px; /* 세로 크기 200px로 조정 */
         }
 
         .book-details {
@@ -53,7 +60,11 @@
 </head>
 <body>
 
-    <div id="savedBooks" style="background-color: red"></div>
+<div style="text-align: center;">
+    <p style="font-weight: bold; font-size: 30px">저장된 도서 목록</p>
+</div>
+
+    <div id="savedBooks"></div>
 
 <script>
     // 페이지 로드 시 저장된 도서 목록을 불러와서 화면에 출력
@@ -90,26 +101,56 @@
             // ISBN 및 이미지 부분
             var bookInfo = document.createElement("div");
             bookInfo.className = "book-info";
-            bookInfo.innerHTML = "<p>" + book.isbn + "</p><img src='" + book.image + "' alt='Book Cover'>";
+            bookInfo.innerHTML = "<p><b>ISBN :</b> " + book.isbn + "</p><img src='" + book.image + "' alt='Book Cover'>";
 
             // 도서 제목 및 세부 정보 부분
             var bookDetails = document.createElement("div");
             bookDetails.className = "book-details";
             var titleLink = "<h3><a href='" + book.link + "'>" + book.title + "</a></h3>";
-            var discountInfo = "<p>Discount: " + book.discount + "</p>";
-            var authorPublisherInfo = "<p>" + book.author + " / " + book.publisher + "</p>";
-            var pubdateInfo = "<p>Pubdate: " + book.pubdate + "</p>";
+            var discountInfo = "<p><b>가격:</b> " + book.discount + "</p>";
+            var authorPublisherInfo = "<p><b>작가/출판사:</b> " + book.author + " / " + book.publisher + "</p>";
+            var pubdateInfo = "<p><b>출판일:</b> " + book.pubdate + "</p>";
             bookDetails.innerHTML = titleLink + discountInfo + authorPublisherInfo + pubdateInfo;
 
-            // 도서 목록에 도서 삭제 등의 동작을 추가할 경우 이 부분에 버튼 등을 추가
+            // 도서 목록에 도서 삭제 버튼 추가
+            var deleteButton = document.createElement("button");
+            deleteButton.innerHTML = "삭제";
+            deleteButton.className = "btn btn-danger";
+            deleteButton.style.marginTop = "10px";
+            deleteButton.style.marginBottom = "10px";
+            deleteButton.style.marginLeft = "20px";
+            deleteButton.addEventListener("click", function () {
+                // 삭제 요청을 서버로 보냄
+                deleteBook(book.isbn);
+            });
 
             // 생성한 요소들을 부모 div에 추가
             bookItem.appendChild(bookInfo);
             bookItem.appendChild(bookDetails);
+            bookItem.appendChild(deleteButton); // 삭제 버튼 추가
 
             // 부모 div를 목록에 추가
             savedBooksContainer.appendChild(bookItem);
         });
+    }
+
+    // 도서 삭제 요청 함수
+    function deleteBook(isbn) {
+        // 서버에 삭제 요청 보내는 부분
+        var deleteRequest = new XMLHttpRequest();
+        deleteRequest.open("DELETE", "/books/save/" + isbn, true);
+        deleteRequest.onreadystatechange = function () {
+            if (deleteRequest.readyState == 4) {
+                if (deleteRequest.status == 200) {
+                    alert("도서 삭제 완료.");
+                    // 삭제가 성공하면 저장된 도서 목록을 다시 로드하여 갱신
+                    loadSavedBooks();
+                } else {
+                    alert("도서 삭제 실패.");
+                }
+            }
+        };
+        deleteRequest.send();
     }
 
 </script>
