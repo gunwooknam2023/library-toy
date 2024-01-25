@@ -10,6 +10,7 @@ import com.librarytoy.entity.SavedBook;
 import com.librarytoy.repository.SavedBookRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.ISBN;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -90,6 +91,7 @@ public class BookService {
     }
 
 
+    // 저장된 도서 조회 api
     public List<SearchBookResponseDto> saveBooks() {
         List<SavedBook> savedBooks= savedBookRepository.findAll();
         List<SearchBookResponseDto> searchBookResponseDtos = new ArrayList<>();
@@ -100,5 +102,15 @@ public class BookService {
         }
 
         return searchBookResponseDtos;
+    }
+
+    // 저장된 도서 삭제 api
+    public String deleteBook(String isbn) {
+        SavedBook savedBook = savedBookRepository.findByIsbn(isbn).orElseThrow(
+                () -> new IllegalArgumentException("삭제할 책이 존재하지 않습니다.")
+        );
+
+        savedBookRepository.delete(savedBook);
+        return "ISBN : "+ isbn + "번 책이 목록에서 삭제되었습니다.";
     }
 }

@@ -50,4 +50,15 @@ public class BookController {
         return ResponseEntity.ok(searchBookResponseDtos);
     }
 
+    /**
+     * 저장된 도서 삭제 api
+     * @param isbn 삭제할 책의 isbn번호
+     * @return 삭제 수행 결과
+     */
+    @DeleteMapping("/books/save/{isbn}")
+    ResponseEntity<String> deleteBook(@PathVariable String isbn){
+        String result = bookService.deleteBook(isbn);
+        return ResponseEntity.ok(result);
+    }
+
 }
