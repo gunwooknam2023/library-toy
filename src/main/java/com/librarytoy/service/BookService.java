@@ -84,7 +84,7 @@ public class BookService {
             savedBookRepository.save(savedBook);
             return "도서가 저장되었습니다.";
         } else{
-            return "이미 저장된 도서입니다.";
+            throw new IllegalStateException("이미 저장된 도서입니다.");
         }
     }
 }

@@ -19,6 +19,7 @@ public class BookController {
     /**
      * 도서 검색 api (query)
      * @param query 검색할 책의 제목
+     * @param page 확인할 페이지 번호
      * @return 검색한 책의 정보 반환
      */
     @GetMapping("/books")
