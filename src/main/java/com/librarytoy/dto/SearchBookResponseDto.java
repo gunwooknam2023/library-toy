@@ -1,5 +1,6 @@
 package com.librarytoy.dto;
 
+import com.librarytoy.entity.SavedBook;
 import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,4 +19,16 @@ public class SearchBookResponseDto {
     private String pubdate; // 출간일
     private String isbn; // ISBN
     private String description; // 책 설명
+
+    public SearchBookResponseDto(SavedBook savedBook){
+        this.title = savedBook.getTitle();
+        this.link = savedBook.getLink();
+        this.image = savedBook.getImage();
+        this.author = savedBook.getAuthor();
+        this.discount = savedBook.getDiscount();
+        this.publisher = savedBook.getPublisher();
+        this.pubdate = savedBook.getPubdate();
+        this.isbn = savedBook.getIsbn();
+        this.description = savedBook.getDiscount();
+    }
 }

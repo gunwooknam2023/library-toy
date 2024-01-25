@@ -19,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.beans.Transient;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,5 +87,18 @@ public class BookService {
         } else{
             throw new IllegalStateException("이미 저장된 도서입니다.");
         }
+    }
+
+
+    public List<SearchBookResponseDto> saveBooks() {
+        List<SavedBook> savedBooks= savedBookRepository.findAll();
+        List<SearchBookResponseDto> searchBookResponseDtos = new ArrayList<>();
+
+        for(SavedBook savedBook : savedBooks){
+            SearchBookResponseDto searchBookResponseDto = new SearchBookResponseDto(savedBook);
+            searchBookResponseDtos.add(searchBookResponseDto);
+        }
+
+        return searchBookResponseDtos;
     }
 }

@@ -40,5 +40,14 @@ public class BookController {
         return ResponseEntity.ok(result);
     }
 
+    /**
+     * 저장된 도서 조회 api
+     * @return 저장된 책의 정보 반환
+     */
+    @GetMapping("/books/save")
+    ResponseEntity<List<SearchBookResponseDto>> saveBooks(){
+        List<SearchBookResponseDto> searchBookResponseDtos = bookService.saveBooks();
+        return ResponseEntity.ok(searchBookResponseDtos);
+    }
 
 }
