@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface SavedBookRepository extends JpaRepository<SavedBook, Long> {
-    Optional<SavedBook> findByIsbn(String isbn);
+    Optional<SavedBook> findByIsbn(String isbn); // ISBN 으로 도서 검색
 }

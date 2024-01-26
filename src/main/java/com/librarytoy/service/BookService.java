@@ -8,9 +8,7 @@ import com.librarytoy.dto.SearchBookOfNaverResponseDto;
 import com.librarytoy.dto.SearchBookResponseDto;
 import com.librarytoy.entity.SavedBook;
 import com.librarytoy.repository.SavedBookRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.ISBN;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.beans.Transient;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +34,7 @@ public class BookService {
 
     // 도서 검색 api (title)
     public List<SearchBookResponseDto> bookSearch(String query, int page){
+        // 한 페이지에 10개씩 출력. 1페이지에는 1~10 2페이지에는 11~20 따라서 (page-1) * 10 + 1을 해서 start 지점 설정
         int start = (page - 1) * 10 + 1;
 
         // RequestParam 방식으로 책의 제목을 가져와서 조회(api)
@@ -79,9 +77,11 @@ public class BookService {
 
     // 도서 저장 api
     public String bookSave(BookSaveRequestDto bookSaveRequestDto) {
-        Optional<SavedBook> findBook = savedBookRepository.findByIsbn(bookSaveRequestDto.getIsbn());
+        // 저장할 책 조회
+        Optional<SavedBook> requestBook = savedBookRepository.findByIsbn(bookSaveRequestDto.getIsbn());
 
-        if(findBook.isEmpty()){
+        // requestBook이 빈값이라면 DB에 저장, 데이터가 들어 있다면 예외발생
+        if(requestBook.isEmpty()){
             SavedBook savedBook = new SavedBook(bookSaveRequestDto);
             savedBookRepository.save(savedBook);
             return "도서가 저장되었습니다.";
@@ -93,9 +93,13 @@ public class BookService {
 
     // 저장된 도서 조회 api
     public List<SearchBookResponseDto> saveBooks() {
+        // 저장된 책 리스트 가져오기
         List<SavedBook> savedBooks= savedBookRepository.findAll();
+
+        // 응답해줄 dto List 생성
         List<SearchBookResponseDto> searchBookResponseDtos = new ArrayList<>();
 
+        // 응답 dto 에 값을 추가한 뒤 List 에 추가
         for(SavedBook savedBook : savedBooks){
             SearchBookResponseDto searchBookResponseDto = new SearchBookResponseDto(savedBook);
             searchBookResponseDtos.add(searchBookResponseDto);
@@ -106,6 +110,7 @@ public class BookService {
 
     // 저장된 도서 삭제 api
     public String deleteBook(String isbn) {
+        // 삭제할 책 확인. 없다면 예외처리
         SavedBook savedBook = savedBookRepository.findByIsbn(isbn).orElseThrow(
                 () -> new IllegalArgumentException("삭제할 책이 존재하지 않습니다.")
         );
