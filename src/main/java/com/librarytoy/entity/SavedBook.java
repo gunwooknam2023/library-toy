@@ -49,7 +49,7 @@ public class SavedBook {
     private String isbn;
 
     public SavedBook(BookSaveRequestDto bookSaveRequestDto){
-            this.title = bookSaveRequestDto.getTitle();
+            this.title = bookSaveRequestDto.getTitle(); // 책 제목
             this.link = bookSaveRequestDto.getLink(); // 네이버 도서 정보 URL
             this.image = bookSaveRequestDto.getImage(); // 책 이미지 URL
             this.author = bookSaveRequestDto.getAuthor(); // 저자 이름

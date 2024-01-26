@@ -1,7 +1,6 @@
 package com.librarytoy.dto;
 
 import com.librarytoy.entity.SavedBook;
-import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
