@@ -64,6 +64,10 @@
     <p style="font-weight: bold; font-size: 30px">저장된 도서 목록</p>
 </div>
 
+<div class="book-count" style="text-align: center;">
+    <p style="font-weight: bold; font-size: 20px;"><span id="bookCount">0</span></p>
+</div>
+
     <div id="savedBooks"></div>
 
 <script>
@@ -132,6 +136,9 @@
             // 부모 div를 목록에 추가
             savedBooksContainer.appendChild(bookItem);
         });
+        // 저장된 도서 개수를 표시
+        var bookCountElement = document.getElementById("bookCount");
+        bookCountElement.textContent = savedBooks.length !== 0 ? "개수: " + savedBooks.length : "저장된 도서가 없습니다.";
     }
 
     // 도서 삭제 요청 함수
