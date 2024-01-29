@@ -25,6 +25,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BookService {
     private final SavedBookRepository savedBookRepository;
+    private static final String DELETE_BOOK_SUCCESS_MESSAGE = "ISBN : %s번 책이 목록에서 삭제되었습니다.";
+    private static final String SAVE_BOOK_SUCCESS_MESSAGE = "ISBN : %s번 책이 저장되었습니다.";
 
     @Value("${X-Naver-Client-Id}")
     private String NAVER_CLIENT_ID;
@@ -84,7 +86,7 @@ public class BookService {
         if(requestBook.isEmpty()){
             SavedBook savedBook = new SavedBook(bookSaveRequestDto);
             savedBookRepository.save(savedBook);
-            return "도서가 저장되었습니다.";
+            return String.format(SAVE_BOOK_SUCCESS_MESSAGE, savedBook.getIsbn());
         } else{
             throw new IllegalStateException("이미 저장된 도서입니다.");
         }
@@ -116,6 +118,6 @@ public class BookService {
         );
 
         savedBookRepository.delete(savedBook);
-        return "ISBN : "+ isbn + "번 책이 목록에서 삭제되었습니다.";
+        return String.format(DELETE_BOOK_SUCCESS_MESSAGE, isbn);
     }
 }
